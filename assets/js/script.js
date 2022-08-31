@@ -29,3 +29,17 @@ for (var hour=9; hour < 18; hour++) {
               </div>
             </div>`);  
 }
+
+$.each($('.time-block'), function(index, value) {
+    let dateHour = $(value).attr('data-time');
+    if (Number(dateHour) === m.hour()) {
+      $(this).find('textarea').addClass('present');
+    } else if (Number(dateHour) < m.hour()) {
+      $(this).find('textarea').addClass('past').attr('disabled', 'disabled');
+      $(this).find('.save-button').addClass('disabled').attr('disabled', true);
+    } else {
+      $(this).find('textarea').addClass('future');
+    }
+  });
+
+  console.log(currentTime);
