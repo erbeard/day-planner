@@ -1,3 +1,4 @@
+//Variables
 var scheduledHours = [];
 var availableHours = [];
 var m = moment();
@@ -11,6 +12,8 @@ function clock() {
 
 setInterval(clock, 1000);
 
+
+//Add textarea to schedule
 for (var hour=9; hour < 18; hour++) {
     scheduledHours.push(moment({hour}).format('h  a'));
     $('.container').append(`<div class='row time-block' data-time='${hour}'>
@@ -30,6 +33,7 @@ for (var hour=9; hour < 18; hour++) {
             </div>`);  
 }
 
+//check current time to determine past, present, or future
 $.each($('.time-block'), function(index, value) {
     let dateHour = $(value).attr('data-time');
     if (Number(dateHour) === m.hour()) {
@@ -43,3 +47,68 @@ $.each($('.time-block'), function(index, value) {
   });
 
   console.log(currentTime);
+
+if (currentTime >=0 && currentTime < 9){
+  localStorage.clear();
+}
+
+
+if (localStorage.getItem('availableHours')) {
+  availableHours = JSON.parse(localStorage.getItem('availableHours'));
+} else {
+  availableHours = {
+    '9': {
+      time: '9',
+      value: ''
+    },
+    '10': {
+      time: '10',
+      value: ''
+    },
+    '11': {
+      time: '11',
+      value: ''
+    },
+    '12': {
+      time: '12',
+      value: ''
+    },
+    '13': {
+      time: '13',
+      value: ''
+    },
+    '14': {
+      time: '14',
+      value: ''
+    },
+    '15': {
+      time: '15',
+      value: ''
+    },
+    '16': {
+      time: '16',
+      value: ''
+    },
+    '17': {
+      time: '17',
+      value: ''
+    }
+  };
+}
+
+//sets value of availableHours to eqaul user input for each row
+$('.time-block').each(function() {
+  $(this).find('.text-area').val(availableHours[$(this).attr('data-time')].value);
+});
+
+//Saves entry to local storage on click
+$('.save-button').on('click', function(event){
+  event.preventDefault();
+
+  var timeValue = $(this).closest('.time-block').attr('data-time');
+
+    var textValue = $(this).closest('.time-block').find('.text-area').val();
+    availableHours[timeValue].value = textValue;
+
+    localStorage.setItem('availableHours', JSON.stringify(availableHours));
+});
